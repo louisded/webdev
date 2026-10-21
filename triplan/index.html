@@ -231,6 +231,30 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
 .choice input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--text); }
 .ferr { padding: 8px 10px; border-radius: 8px; background: rgba(240,100,100,.10); color: #F5B0B0; font-size: 13px; margin-bottom: 6px; overflow-wrap: anywhere; }
 
+/* Analyse */
+.antabs { margin-bottom: 12px; }
+.antabs { overflow-x: auto; scrollbar-width: none; }
+.antabs::-webkit-scrollbar { display: none; }
+.antabs button { flex: 1 0 auto; font-size: 13px; padding: 0 10px; }
+.anbody .chart svg { display: block; width: 100%; height: auto; }
+.anbody .chart text { fill: var(--text3); stroke: none; font: 500 10px var(--sans); }
+.h3 { margin: 16px 0 8px; font: 700 15px/1.2 var(--cond); text-transform: uppercase; letter-spacing: .05em; color: var(--text2); }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+.kv div { padding: 8px 10px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); }
+.kv span { display: block; font-size: 12px; color: var(--text2); }
+.kv b { font: 700 18px/1.2 var(--cond); }
+.zbars { display: grid; gap: 8px; }
+.zrow { display: flex; align-items: center; gap: 10px; }
+.zchip { display: inline-block; min-width: 30px; padding: 3px 5px; border-radius: 5px; color: var(--bg); font: 700 13px/1 var(--cond); text-align: center; }
+.zmain { flex: 1; min-width: 0; }
+.ztrack { height: 10px; border-radius: 5px; background: var(--surface2); overflow: hidden; margin-bottom: 2px; }
+.ztrack i { display: block; height: 100%; }
+.zval { flex: none; width: 58px; text-align: right; font-weight: 600; font-size: 14px; line-height: 1.2; }
+.segline { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 1px; }
+.segline span { display: block; min-width: 1px; }
+.anbody .tbl { font-size: 13px; }
+.anbody .tbl th, .anbody .tbl td { padding: 7px 3px; }
+
 /* Toast */
 .toast { position: fixed; z-index: 60; left: 50%; bottom: calc(var(--tabh) + 80px + env(safe-area-inset-bottom)); transform: translateX(-50%); max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 10px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .2s; }
 .toast.show { opacity: 1; }
@@ -355,6 +379,25 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       corosErrSelect: 'Plusieurs connecteurs COROS : choisissez-en un dans claude.ai.',
       corosErrBusy: 'COROS ne répond pas pour le moment. Réessayez plus tard.',
       corosErrFormat: 'Réponse de COROS non reconnue.', corosErrOther: 'Synchronisation COROS impossible ({m}).',
+      analyze: 'Analyser l’activité', anTitle: 'Analyse de l’activité',
+      anSpeed: 'Vitesse', anHr: 'FC', anZones: 'Zones', anPower: 'Puissance', anIntervals: 'Intervalles',
+      anNoData: 'Pas de données détaillées (vitesse, FC, puissance) pour cette activité.',
+      anReimport: 'Réimportez le fichier FIT, GPX ou TCX de cette activité pour obtenir les graphiques.',
+      anLoadCoros: 'Charger le détail depuis COROS', anLoading: 'Chargement du détail COROS…', anCorosFail: 'Fichier COROS illisible.',
+      anSpeedAxis: 'Vitesse en km/h (moyenne glissante 10 s) · temps écoulé', anHrAxis: 'FC en bpm · fond coloré selon la zone de FC',
+      anPowerAxis: 'Puissance en W (moyenne glissante 10 s)', anAvg: 'Moyenne', anMax: 'Max', anAvgPace: 'Allure moyenne', anHrMax: 'FC max de réf.',
+      anNp: 'Puissance normalisée', anIf: 'Facteur d’intensité', anCurve: 'Meilleures puissances',
+      anPowerNonBike: 'Puissance hors vélo affichée telle que mesurée par la montre ; les zones utilisent l’allure ou la FC.',
+      anHrZones: 'Zones de FC', anRibbon: 'bande colorée = zone détectée', anEfforts: 'Efforts détectés en Z4–Z5 : {n}',
+      anNoEfforts: 'Aucun effort soutenu en Z4 ou Z5.', anStart: 'Début', anDur: 'Durée', anSegments: 'Enchaînement des zones',
+      zBasisPw: 'Zones de puissance · FTP estimée {ftp} W (meilleurs 20 min × 0,95, 90 derniers jours)',
+      zBasisSp: 'Zones d’allure · VDOT estimée {v} (meilleurs efforts des 90 derniers jours) · seuil ≈ {tp}',
+      zBasisHr: 'Zones de FC · FC max observée {hr} bpm (365 derniers jours)',
+      zBasisPwM: 'Zones de puissance · FTP {ftp} W (saisie manuelle)', zBasisSpM: 'Zones d’allure · VDOT {v} (saisie manuelle) · seuil ≈ {tp}', zBasisHrM: 'Zones de FC · FC max {hr} bpm (saisie manuelle)',
+      zTitle: 'Zones d’intensité', zIntro: 'Calculées automatiquement à partir de vos activités importées. Laissez un champ vide pour garder l’estimation, ou saisissez votre valeur si elle est connue (test, course récente).',
+      zFtp: 'FTP vélo (W)', zVdot: 'VDOT course', zHrmax: 'FC max (bpm)', zAuto: 'Auto : {v}', zNone: 'pas encore de données',
+      zModels: 'Vélo : Z1 < 56 %, Z2 56–75 %, Z3 76–90 %, Z4 91–105 %, Z5 > 105 % de la FTP. Course : Z1 < 59 %, Z2 59–74 %, Z3 74–84 %, Z4 84–94 %, Z5 > 94 % de la VO2max (VDOT, Daniels). Autres : Z1 < 60 %, Z2 60–70 %, Z3 70–80 %, Z4 80–90 %, Z5 > 90 % de la FC max.',
+      zSaved: 'Valeur enregistrée', zAutoSet: 'Estimation automatique utilisée',
       cd: 'J-{n}', sampleRaceA: 'Triathlon objectif (exemple)', sampleRaceC: 'Sprint de préparation (exemple)'
     },
     en: {
@@ -420,6 +463,25 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       corosErrSelect: 'Several COROS connectors: choose one in claude.ai.',
       corosErrBusy: 'COROS is not responding right now. Try again later.',
       corosErrFormat: 'Unrecognised COROS response.', corosErrOther: 'COROS sync failed ({m}).',
+      analyze: 'Analyse activity', anTitle: 'Activity analysis',
+      anSpeed: 'Speed', anHr: 'HR', anZones: 'Zones', anPower: 'Power', anIntervals: 'Intervals',
+      anNoData: 'No detailed data (speed, HR, power) for this activity.',
+      anReimport: 'Re-import this activity’s FIT, GPX or TCX file to get the charts.',
+      anLoadCoros: 'Load details from COROS', anLoading: 'Loading COROS details…', anCorosFail: 'Unreadable COROS file.',
+      anSpeedAxis: 'Speed in km/h (10 s rolling average) · elapsed time', anHrAxis: 'HR in bpm · background coloured by HR zone',
+      anPowerAxis: 'Power in W (10 s rolling average)', anAvg: 'Average', anMax: 'Max', anAvgPace: 'Average pace', anHrMax: 'Ref. max HR',
+      anNp: 'Normalized power', anIf: 'Intensity factor', anCurve: 'Best powers',
+      anPowerNonBike: 'Non-cycling power shown as measured by the watch; zones use pace or HR.',
+      anHrZones: 'HR zones', anRibbon: 'coloured strip = detected zone', anEfforts: 'Efforts detected in Z4–Z5: {n}',
+      anNoEfforts: 'No sustained effort in Z4 or Z5.', anStart: 'Start', anDur: 'Duration', anSegments: 'Zone sequence',
+      zBasisPw: 'Power zones · estimated FTP {ftp} W (best 20 min × 0.95, last 90 days)',
+      zBasisSp: 'Pace zones · estimated VDOT {v} (best efforts, last 90 days) · threshold ≈ {tp}',
+      zBasisHr: 'HR zones · observed max HR {hr} bpm (last 365 days)',
+      zBasisPwM: 'Power zones · FTP {ftp} W (manual)', zBasisSpM: 'Pace zones · VDOT {v} (manual) · threshold ≈ {tp}', zBasisHrM: 'HR zones · max HR {hr} bpm (manual)',
+      zTitle: 'Intensity zones', zIntro: 'Computed automatically from your imported activities. Leave a field empty to keep the estimate, or enter your own value if known (test, recent race).',
+      zFtp: 'Bike FTP (W)', zVdot: 'Running VDOT', zHrmax: 'Max HR (bpm)', zAuto: 'Auto: {v}', zNone: 'no data yet',
+      zModels: 'Bike: Z1 < 56%, Z2 56–75%, Z3 76–90%, Z4 91–105%, Z5 > 105% of FTP. Run: Z1 < 59%, Z2 59–74%, Z3 74–84%, Z4 84–94%, Z5 > 94% of VO2max (VDOT, Daniels). Other: Z1 < 60%, Z2 60–70%, Z3 70–80%, Z4 80–90%, Z5 > 90% of max HR.',
+      zSaved: 'Value saved', zAutoSet: 'Automatic estimate in use',
       cd: 'D-{n}', sampleRaceA: 'Goal triathlon (sample)', sampleRaceC: 'Training sprint (sample)'
     }
   };
@@ -532,12 +594,17 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     var dur = clampNum(a.dur, 0, 1440);
     if (dur == null) return null;
     var dist = clampNum(a.dist, 0, 2000);
-    return {
+    var out = {
       dur: Math.round(dur),
       dist: dist == null ? 0 : Math.round(dist * 100) / 100,
       key: str(a.key, 40),
       fmt: ACT_FORMATS.indexOf(a.fmt) >= 0 ? a.fmt : 'FIT'
     };
+    if (typeof a.cid === 'string' && /^\d{1,30}$/.test(a.cid)) {
+      out.cid = a.cid;
+      out.ct = clampNum(a.ct, 0, 65535) || 0;
+    }
+    return out;
   }
   function sanitizeSession(s) {
     if (!s || typeof s !== 'object') return null;
@@ -582,9 +649,19 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       seen: (Array.isArray(c.seen) ? c.seen : []).filter(function (k) { return typeof k === 'string' && /^t\d+$/.test(k); }).slice(-1000)
     };
   }
+  var ZONE_LIMITS = { ftp: [50, 600], vdot: [20, 90], hrmax: [120, 230] };
+  function sanitizeZones(z) {
+    z = z && typeof z === 'object' ? z : {};
+    var out = {};
+    Object.keys(ZONE_LIMITS).forEach(function (k) {
+      var v = z[k] == null || z[k] === '' ? NaN : parseNum(z[k]);
+      out[k] = isFinite(v) && v >= ZONE_LIMITS[k][0] && v <= ZONE_LIMITS[k][1] ? (k === 'vdot' ? Math.round(v * 10) / 10 : Math.round(v)) : null;
+    });
+    return out;
+  }
   function sanitize(o) {
     if (!o || typeof o !== 'object' || Array.isArray(o)) return null;
-    var out = { v: 1, lang: o.lang === 'en' ? 'en' : (o.lang === 'fr' ? 'fr' : defaultLang()), sample: o.sample === true, sessions: [], races: [], coros: sanitizeCoros(o.coros) };
+    var out = { v: 1, lang: o.lang === 'en' ? 'en' : (o.lang === 'fr' ? 'fr' : defaultLang()), sample: o.sample === true, sessions: [], races: [], coros: sanitizeCoros(o.coros), zones: sanitizeZones(o.zones) };
     var ids = {};
     (Array.isArray(o.sessions) ? o.sessions : []).forEach(function (s) {
       var c = sanitizeSession(s);
@@ -632,12 +709,19 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     if (hs < 12 || sig !== '.FIT') throw new Error('format');
     var dataSize = dv.getUint32(4, true);
     var pos = hs, end = Math.min(hs + dataSize, len);
-    var defs = {}, sessions = [];
+    var defs = {}, sessions = [], records = [], lastTs = null;
     while (pos < end) {
       var h = dv.getUint8(pos++);
-      var local, isDef = false, hasDev = false;
+      var local, isDef = false, hasDev = false, cts = null;
       if (h & 0x80) {
-        local = (h >> 5) & 0x03; // en-tête à horodatage compressé : message de données
+        // en-tête à horodatage compressé : message de données, décalage de 5 bits sur le dernier horodatage
+        local = (h >> 5) & 0x03;
+        if (lastTs != null) {
+          var off = h & 0x1F;
+          cts = (lastTs & ~0x1F) + off;
+          if (off < (lastTs & 0x1F)) cts += 0x20;
+          lastTs = cts;
+        }
       } else {
         local = h & 0x0F;
         isDef = !!(h & 0x40);
@@ -672,7 +756,19 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
           pos += f.s;
         }
         pos += d.dev;
+        if (rec[253] != null) lastTs = rec[253];
+        else if (cts != null) rec[253] = cts;
         if (d.g === 18) sessions.push(rec);
+        else if (d.g === 20 && rec[253] != null) {
+          var spd = rec[73] != null ? rec[73] / 1000 : rec[6] != null ? rec[6] / 1000 : null;
+          records.push({
+            t: (rec[253] + FIT_EPOCH) * 1000,
+            spd: spd,
+            hr: rec[3] != null && rec[3] > 0 ? rec[3] : null,
+            pw: rec[7] != null && rec[7] < 3000 ? rec[7] : null,
+            d: rec[5] != null ? rec[5] / 100 : null
+          });
+        }
       }
     }
     var list = [];
@@ -682,22 +778,67 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       var timer = r[8] != null ? r[8] : r[7];
       list.push({
         start: (r[2] + FIT_EPOCH) * 1000,
+        end: (r[2] + FIT_EPOCH) * 1000 + (r[7] != null ? r[7] : timer || 0),
         sp: r[5],
         dur: timer != null ? timer / 1000 / 60 : 0,
         dist: r[9] != null ? r[9] / 100 / 1000 : 0
       });
     });
     if (!list.length) throw new Error('nosession');
+    function streamFor(from, to) {
+      return buildStream(records.filter(function (p) { return p.t >= from && p.t <= to + 1000; }), from);
+    }
     var multi = list.length > 1 && list.some(function (x) { return x.sp === 1 || x.sp === 2; });
     if (multi) {
-      var a = { start: Infinity, sport: 'brick', dur: 0, dist: 0, fmt: 'FIT' };
-      list.forEach(function (x) { a.start = Math.min(a.start, x.start); a.dur += x.dur; a.dist += x.dist; });
+      var a = { start: Infinity, sport: 'brick', dur: 0, dist: 0, fmt: 'FIT' }, last = 0;
+      list.forEach(function (x) { a.start = Math.min(a.start, x.start); last = Math.max(last, x.end); a.dur += x.dur; a.dist += x.dist; });
       a.key = actKey(a.start);
+      a.stream = streamFor(a.start, last);
       return [a];
     }
     return list.map(function (x) {
-      return { start: x.start, sport: FIT_SPORT[x.sp] || '', dur: x.dur, dist: x.dist, fmt: 'FIT', key: actKey(x.start) };
+      return { start: x.start, sport: FIT_SPORT[x.sp] || '', dur: x.dur, dist: x.dist, fmt: 'FIT', key: actKey(x.start), stream: streamFor(x.start, x.end) };
     });
+  }
+
+  /* Série temporelle rééchantillonnée : pas fixe (1 s, ou plus pour rester sous 4000 points), null = pas de mesure */
+  function buildStream(pts, t0) {
+    if (!pts || pts.length < 10) return null;
+    pts = pts.slice().sort(function (a, b) { return a.t - b.t; });
+    if (t0 == null || t0 > pts[0].t) t0 = pts[0].t;
+    var hasSpd = pts.some(function (p) { return p.spd != null; });
+    if (!hasSpd) {
+      for (var i = 1; i < pts.length; i++) {
+        var dt = (pts[i].t - pts[i - 1].t) / 1000;
+        if (pts[i].d != null && pts[i - 1].d != null && dt > 0 && dt <= 30) pts[i].spd = Math.max(0, (pts[i].d - pts[i - 1].d) / dt);
+      }
+    }
+    var total = (pts[pts.length - 1].t - t0) / 1000;
+    if (total < 30) return null;
+    var step = Math.max(1, Math.ceil(total / 4000));
+    var n = Math.floor(total / step) + 1;
+    var acc = { sp: [], hr: [], pw: [] }, cnt = { sp: [], hr: [], pw: [] };
+    pts.forEach(function (p) {
+      var b = Math.min(n - 1, Math.floor((p.t - t0) / 1000 / step));
+      if (p.spd != null && isFinite(p.spd)) { acc.sp[b] = (acc.sp[b] || 0) + p.spd; cnt.sp[b] = (cnt.sp[b] || 0) + 1; }
+      if (p.hr != null) { acc.hr[b] = (acc.hr[b] || 0) + p.hr; cnt.hr[b] = (cnt.hr[b] || 0) + 1; }
+      if (p.pw != null) { acc.pw[b] = (acc.pw[b] || 0) + p.pw; cnt.pw[b] = (cnt.pw[b] || 0) + 1; }
+    });
+    var out = { v: 1, step: step, t0: t0, sp: null, hr: null, pw: null };
+    ['sp', 'hr', 'pw'].forEach(function (k) {
+      var arr = new Array(n), any = false;
+      for (var b = 0; b < n; b++) {
+        if (cnt[k][b]) {
+          var v = acc[k][b] / cnt[k][b];
+          arr[b] = k === 'sp' ? Math.round(v * 100) : Math.round(v); // vitesse en cm/s
+          any = true;
+        } else arr[b] = null;
+      }
+      if (any) out[k] = arr;
+    });
+    if (!out.sp && !out.hr && !out.pw) return null;
+    if (out.pw && !out.pw.some(function (v) { return v > 0; })) out.pw = null;
+    return out;
   }
 
   function parseXml(text) {
@@ -712,6 +853,13 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     return out;
   }
   function childText(el, name) { var c = childrenNamed(el, name)[0]; return c ? c.textContent.trim() : ''; }
+  function descNum(el, names) {
+    for (var i = 0; i < names.length; i++) {
+      var c = tags(el, names[i])[0];
+      if (c) { var v = parseFloat(c.textContent); if (isFinite(v)) return v; }
+    }
+    return null;
+  }
   function guessSport(txt) {
     txt = (txt || '').toLowerCase();
     if (/swim|natation|nage/.test(txt)) return 'swim';
@@ -735,7 +883,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     for (var i = 0; i < trks.length; i++) {
       var trk = trks[i];
       var pts = tags(trk, 'trkpt');
-      var first = null, last = null, dist = 0, prev = null;
+      var first = null, last = null, dist = 0, prev = null, samples = [];
       for (var j = 0; j < pts.length; j++) {
         var p = pts[j];
         var lat = parseFloat(p.getAttribute('lat')), lon = parseFloat(p.getAttribute('lon'));
@@ -746,7 +894,12 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
         }
         var tm = childText(p, 'time');
         var ms = tm ? Date.parse(tm) : NaN;
-        if (isFinite(ms)) { if (first == null) first = ms; last = ms; }
+        if (isFinite(ms)) {
+          if (first == null) first = ms;
+          last = ms;
+          var hr = descNum(p, ['hr']), pw = descNum(p, ['power', 'PowerInWatts', 'Watts']), sp = descNum(p, ['speed']);
+          samples.push({ t: ms, spd: sp, hr: hr && hr > 0 ? hr : null, pw: pw != null && pw < 3000 ? pw : null, d: prev ? dist * 1000 : null });
+        }
       }
       if (first == null) continue;
       out.push({
@@ -755,7 +908,8 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
         dur: (last - first) / 60000,
         dist: dist,
         fmt: 'GPX',
-        key: actKey(first)
+        key: actKey(first),
+        stream: buildStream(samples, first)
       });
     }
     if (!out.length) throw new Error('nosession');
@@ -775,14 +929,25 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       var start = Date.parse(childText(a, 'Id'));
       if (!isFinite(start) && laps[0]) start = Date.parse(laps[0].getAttribute('StartTime'));
       if (!isFinite(start)) continue;
-      var sec = 0, m = 0;
+      var sec = 0, m = 0, samples = [];
       laps.forEach(function (l) {
         var ts = parseFloat(childText(l, 'TotalTimeSeconds'));
         var dm = parseFloat(childText(l, 'DistanceMeters'));
         if (isFinite(ts)) sec += ts;
         if (isFinite(dm)) m += dm;
+        var tps = tags(l, 'Trackpoint');
+        for (var j = 0; j < tps.length; j++) {
+          var tp = tps[j];
+          var ms = Date.parse(childText(tp, 'Time'));
+          if (!isFinite(ms)) continue;
+          var hrEl = childrenNamed(tp, 'HeartRateBpm')[0];
+          var hr = hrEl ? parseFloat(childText(hrEl, 'Value')) : NaN;
+          var d = parseFloat(childText(tp, 'DistanceMeters'));
+          var pw = descNum(tp, ['Watts']), sp = descNum(tp, ['Speed']);
+          samples.push({ t: ms, spd: sp, hr: isFinite(hr) && hr > 0 ? hr : null, pw: pw != null && pw < 3000 ? pw : null, d: isFinite(d) ? d : null });
+        }
       });
-      out.push({ start: start, sport: sport, dur: sec / 60, dist: m / 1000, fmt: 'TCX', key: actKey(start) });
+      out.push({ start: start, sport: sport, dur: sec / 60, dist: m / 1000, fmt: 'TCX', key: actKey(start), stream: buildStream(samples, start) });
     }
     if (!out.length) throw new Error('nosession');
     return out;
@@ -901,7 +1066,9 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       var sp = /SportType:\s*(\d+)/.exec(b);
       var dur = du ? hmsToMin(du[1]) : (en ? (Number(en[1]) * 1000 - start) / 60000 : 0);
       var dist = di ? parseFloat(di[1].replace(',', '.')) / (di[2] === 'm' ? 1000 : 1) : 0;
-      out.push({ start: start, sport: sp ? corosSport(Number(sp[1])) : '', dur: Math.max(0, dur), dist: isFinite(dist) ? dist : 0, fmt: 'COROS', key: actKey(start) });
+      var lid = /LabelId:\s*(\d+)/.exec(b);
+      out.push({ start: start, sport: sp ? corosSport(Number(sp[1])) : '', dur: Math.max(0, dur), dist: isFinite(dist) ? dist : 0, fmt: 'COROS', key: actKey(start),
+        cid: lid ? lid[1] : null, ct: sp ? Number(sp[1]) : 0 });
     });
     return dedupeSort(out);
   }
@@ -1279,6 +1446,12 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       + '<button type="button" class="btn block" data-act="loadSample" data-label="' + esc(t('loadSample')) + '" data-confirm="' + esc(t('confirmSample')) + '">' + esc(t('loadSample')) + '</button>'
       + '<button type="button" class="btn danger block" data-act="clearAll" data-label="' + esc(t('clearAll')) + '" data-confirm="' + esc(t('confirmClear')) + '">' + esc(t('clearAll')) + '</button>'
       + '</section>';
+    var ae = autoEstimates(todayIso());
+    h += '<h2 class="h2">' + esc(t('zTitle')) + '</h2><section class="panel"><p class="muted" style="margin-top:0">' + esc(t('zIntro')) + '</p>';
+    [['ftp', 'zFtp', ae.ftp ? ae.ftp + ' W' : null], ['vdot', 'zVdot', ae.vdot ? nf(ae.vdot, 1) : null], ['hrmax', 'zHrmax', ae.hrmax ? ae.hrmax + ' bpm' : null]].forEach(function (f) {
+      h += '<div class="field"><label for="z_' + f[0] + '">' + esc(t(f[1])) + '</label><input type="text" inputmode="decimal" id="z_' + f[0] + '" class="input" data-chg="zoneOv" data-k="' + f[0] + '" value="' + esc(S.zones[f[0]] == null ? '' : String(S.zones[f[0]]).replace('.', S.lang === 'fr' ? ',' : '.')) + '" placeholder="' + esc(t('zAuto', { v: f[2] || t('zNone') })) + '"></div>';
+    });
+    h += '<p class="small" style="margin:0">' + esc(t('zModels')) + '</p></section>';
     h += '<h2 class="h2">' + esc(t('corosTitle')) + '</h2><section class="panel" id="corosBox">' + corosBoxHtml() + '</section>';
     h += '<h2 class="h2">' + esc(t('about')) + '</h2><section class="panel"><p style="margin:0 0 6px;font-weight:600">' + esc(t('versionTxt')) + '</p><p class="muted" style="margin:0">' + esc(t('install')) + '</p></section>';
     return h;
@@ -1298,7 +1471,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     if (first) first.focus();
   }
   function closeSheet() {
-    UI.sheet = null; UI.imp = null; F = null; UI.armed = null;
+    UI.sheet = null; UI.imp = null; UI.an = null; F = null; UI.armed = null;
     $('sheetWrap').hidden = true;
     $('sheetBody').innerHTML = '';
     document.body.classList.remove('noscroll');
@@ -1310,6 +1483,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     if (UI.sheet === 'session') h = sessionSheet();
     else if (UI.sheet === 'race') h = raceSheet();
     else if (UI.sheet === 'import') h = importSheet();
+    else if (UI.sheet === 'analysis') h = analysisSheet();
     $('sheetBody').innerHTML = h;
     $('sheet').scrollTop = sc;
   }
@@ -1362,6 +1536,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     h += '<div class="field"><label for="f_notes">' + esc(t('notes')) + '</label><textarea id="f_notes" class="input" maxlength="1000">' + esc(F.notes) + '</textarea></div>';
     if (F.act) {
       h += '<div class="field"><div class="lbl">' + esc(t('importedAct')) + '</div><div class="actline">' + esc(actLabel(F.act, F.sport)) + '</div>'
+        + (F.id ? '<button type="button" class="btn block" data-act="analyze" data-id="' + esc(F.id) + '">' + esc(t('analyze')) + '</button>' : '')
         + '<button type="button" class="link" data-act="unlinkAct">' + esc(t('unlink')) + '</button></div>';
     }
     h += '<div class="btnrow"><button type="button" class="btn primary" data-act="saveSession">' + esc(t('save')) + '</button>';
@@ -1486,6 +1661,9 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     UI.imp = { stage: 'busy' };
     renderSheet();
     parseFiles(files).then(function (res) {
+      res.acts.forEach(function (a) {
+        if (a.stream && !loadStream(a.key) && S.sessions.some(function (s) { return s.act && s.act.key === a.key; })) saveStream(a.key, a.stream);
+      });
       if (UI.sheet !== 'import') return;
       UI.imp = { stage: 'review', items: buildImportItems(res.acts), errors: res.errors };
       renderSheet();
@@ -1507,6 +1685,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     }
     var lastDate = applyItems(kept);
     markSeen(items.map(function (it) { return it.a; }));
+    if (CO.mcp) corosFetchDetails(kept.map(function (it) { return it.a; }));
     touch();
     persist();
     closeSheet();
@@ -1521,6 +1700,8 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     kept.forEach(function (it) {
       var a = it.a;
       var act = { dur: Math.min(1440, Math.round(a.dur)), dist: Math.round((a.dist || 0) * 100) / 100, key: a.key, fmt: a.fmt };
+      if (a.cid) { act.cid = a.cid; act.ct = a.ct; }
+      if (a.stream) saveStream(a.key, a.stream);
       var date = isoOf(new Date(a.start));
       var s = it.choice.indexOf('link:') === 0 ? findSession(it.choice.slice(5)) : null;
       if (s) {
@@ -1593,6 +1774,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
         markSeen(acts);
         if (items.length) {
           applyItems(items);
+          corosFetchDetails(items.map(function (it) { return it.a; }));
           touch();
           toast(t('corosAutoDone', { n: items.length }));
         }
@@ -1653,6 +1835,473 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     if (document.visibilityState === 'visible' && CO.mcp && S.coros.auto && Date.now() - S.coros.last > 30 * 60000) corosSync(true);
   });
 
+  /* ===== Séries détaillées des activités (stockées à part, hors export JSON) ===== */
+  var ST_PREFIX = KEY + '.st.', ST_IDX = KEY + '.stidx', ST_MAX = 60;
+  var memStreams = {};
+  function streamIdx() {
+    try { var v = JSON.parse(window.localStorage.getItem(ST_IDX) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  }
+  function validStream(st) {
+    return st && typeof st === 'object' && st.v === 1 && st.step >= 1 && isFinite(st.t0) &&
+      ['sp', 'hr', 'pw'].every(function (k) { return st[k] == null || Array.isArray(st[k]); });
+  }
+  function saveStream(key, st) {
+    if (!validStream(st)) return;
+    memStreams[key] = st;
+    var idx = streamIdx().filter(function (k) { return k !== key; });
+    idx.push(key);
+    while (idx.length > ST_MAX) { try { window.localStorage.removeItem(ST_PREFIX + idx.shift()); } catch (e) { /* ignoré */ } }
+    var json = JSON.stringify(st);
+    for (var tries = 0; tries < 8; tries++) {
+      try {
+        window.localStorage.setItem(ST_PREFIX + key, json);
+        window.localStorage.setItem(ST_IDX, JSON.stringify(idx));
+        return;
+      } catch (e) {
+        if (idx.length <= 1) return; // quota : on garde la série en mémoire pour cette session
+        try { window.localStorage.removeItem(ST_PREFIX + idx.shift()); } catch (e2) { return; }
+      }
+    }
+  }
+  function loadStream(key) {
+    if (!key) return null;
+    if (memStreams[key]) return memStreams[key];
+    try {
+      var st = JSON.parse(window.localStorage.getItem(ST_PREFIX + key) || 'null');
+      if (validStream(st)) { memStreams[key] = st; return st; }
+    } catch (e) { /* ignoré */ }
+    return null;
+  }
+  function dropStream(key) {
+    delete memStreams[key];
+    try {
+      window.localStorage.removeItem(ST_PREFIX + key);
+      window.localStorage.setItem(ST_IDX, JSON.stringify(streamIdx().filter(function (k) { return k !== key; })));
+    } catch (e) { /* ignoré */ }
+  }
+  function pruneStreams() {
+    var used = {};
+    S.sessions.forEach(function (s) { if (s.act) used[s.act.key] = 1; });
+    streamIdx().forEach(function (k) { if (!used[k]) dropStream(k); });
+    Object.keys(memStreams).forEach(function (k) { if (!used[k]) delete memStreams[k]; });
+  }
+
+  /* ===== Calculs ===== */
+  function rolling(arr, w) {
+    if (w <= 1) return arr.slice();
+    var out = new Array(arr.length), sum = 0, n = 0, half = Math.floor(w / 2);
+    var q = [];
+    for (var i = 0; i < arr.length + half; i++) {
+      var add = i < arr.length ? arr[i] : null;
+      q.push(add);
+      if (add != null) { sum += add; n++; }
+      if (q.length > w) { var rm = q.shift(); if (rm != null) { sum -= rm; n--; } }
+      var c = i - half;
+      if (c >= 0 && c < arr.length) out[c] = arr[c] == null || !n ? null : sum / n;
+    }
+    return out;
+  }
+  /* meilleure moyenne glissante sur `sec` secondes (null compté 0 : pauses incluses) */
+  function bestMean(arr, step, sec) {
+    var w = Math.round(sec / step);
+    if (!arr || w < 1 || arr.length < w) return null;
+    var sum = 0, best = -1;
+    for (var i = 0; i < arr.length; i++) {
+      sum += arr[i] || 0;
+      if (i >= w) sum -= arr[i - w] || 0;
+      if (i >= w - 1 && sum > best) best = sum;
+    }
+    return best / w;
+  }
+  function meanOf(arr) {
+    var s = 0, n = 0;
+    (arr || []).forEach(function (v) { if (v != null) { s += v; n++; } });
+    return n ? s / n : null;
+  }
+  function maxOf(arr) {
+    var m = null;
+    (arr || []).forEach(function (v) { if (v != null && (m == null || v > m)) m = v; });
+    return m;
+  }
+  function normPower(st) {
+    if (!st.pw) return null;
+    var r = rolling(st.pw.map(function (v) { return v || 0; }), Math.max(1, Math.round(30 / st.step)));
+    var s = 0, n = 0;
+    r.forEach(function (v) { if (v != null) { s += Math.pow(v, 4); n++; } });
+    return n ? Math.pow(s / n, 0.25) : null;
+  }
+
+  /* Daniels & Gilbert : coût en O2 à la vitesse v (m/min) et fraction de VO2max soutenable pendant t (min) */
+  function vo2At(v) { return -4.60 + 0.182258 * v + 0.000104 * v * v; }
+  function pctAt(t) { return 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t); }
+  function speedAtVo2(vo2) { var a = 0.000104, b = 0.182258, c = -4.60 - vo2; return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a); }
+
+  function historyStreams(sport, endIso, days) {
+    var from = addDays(endIso, -days), out = [];
+    S.sessions.forEach(function (s) {
+      if (s.status !== 'done' || !s.act || s.date < from || s.date > endIso) return;
+      if (sport && s.sport !== sport) return;
+      var st = loadStream(s.act.key);
+      if (st) out.push(st);
+    });
+    return out;
+  }
+  /* valeurs de référence : saisie manuelle (Réglages) prioritaire, sinon estimation automatique */
+  function estimates(endIso) {
+    var a = autoEstimates(endIso), z = S.zones;
+    return {
+      ftp: z.ftp || a.ftp, vdot: z.vdot || a.vdot, hrmax: z.hrmax || a.hrmax,
+      man: { ftp: !!z.ftp, vdot: !!z.vdot, hrmax: !!z.hrmax }
+    };
+  }
+  var estCache = {};
+  function autoEstimates(endIso) {
+    var ck = endIso + '|' + S.sessions.length + '|' + Object.keys(memStreams).length + '|' + streamIdx().length;
+    if (estCache.k === ck) return estCache.v;
+    var best20 = 0;
+    historyStreams('bike', endIso, 90).forEach(function (st) { var b = bestMean(st.pw, st.step, 1200); if (b > best20) best20 = b; });
+    var vdot = 0;
+    historyStreams('run', endIso, 90).forEach(function (st) {
+      if (!st.sp) return;
+      [6, 12, 20, 30, 45, 60].forEach(function (min) {
+        var b = bestMean(st.sp, st.step, min * 60);
+        if (b == null) return;
+        var v = b / 100 * 60; // m/min
+        if (v < 110) return; // < 6,6 km/h : marche, ignoré
+        var vd = vo2At(v) / pctAt(min);
+        if (vd > vdot && vd < 90) vdot = vd;
+      });
+    });
+    var hrmax = 0;
+    historyStreams(null, endIso, 365).forEach(function (st) {
+      if (!st.hr) return;
+      var m = maxOf(rolling(st.hr, Math.max(1, Math.round(5 / st.step))));
+      if (m && m > hrmax && m < 230) hrmax = m;
+    });
+    estCache = { k: ck, v: { ftp: best20 ? Math.round(best20 * 0.95) : null, vdot: vdot ? Math.round(vdot * 10) / 10 : null, hrmax: hrmax ? Math.round(hrmax) : null } };
+    return estCache.v;
+  }
+
+  /* Modèle de zones Z1–Z5 : seuils (4 bornes) sur la métrique de référence */
+  function zoneModel(s, st) {
+    var est = estimates(s.date);
+    if (s.sport === 'bike' && st.pw && est.ftp) {
+      return { kind: 'pw', arr: st.pw, th: [0.56, 0.76, 0.91, 1.06].map(function (p) { return p * est.ftp; }), smooth: 30, basis: t(est.man.ftp ? 'zBasisPwM' : 'zBasisPw', { ftp: est.ftp }) };
+    }
+    if (s.sport === 'run' && st.sp && est.vdot) {
+      var th = [0.59, 0.74, 0.84, 0.94].map(function (p) { return speedAtVo2(p * est.vdot) * 100 / 60; });
+      return { kind: 'sp', arr: st.sp, th: th, smooth: 30, basis: t(est.man.vdot ? 'zBasisSpM' : 'zBasisSp', { v: nf(est.vdot, 1), tp: fmtPace(speedAtVo2(0.86 * est.vdot) * 100 / 60) }) };
+    }
+    if (st.hr && est.hrmax) return hrModel(st, est);
+    return null;
+  }
+  function hrModel(st, est) {
+    return { kind: 'hr', arr: st.hr, th: [0.6, 0.7, 0.8, 0.9].map(function (p) { return p * est.hrmax; }), smooth: 10, basis: t(est.man.hrmax ? 'zBasisHrM' : 'zBasisHr', { hr: est.hrmax }) };
+  }
+  function zoneOf(v, th) { var z = 0; while (z < 4 && v >= th[z]) z++; return z; }
+  function timeInZones(model, step) {
+    var arr = model.kind === 'pw' ? rolling(model.arr, Math.max(1, Math.round(5 / step))) : model.arr;
+    var secs = [0, 0, 0, 0, 0];
+    arr.forEach(function (v) { if (v != null) secs[zoneOf(v, model.th)] += step; });
+    return secs;
+  }
+  /* Détection d'intervalles : lissage, classement par zone, fusion des segments trop courts */
+  function detectSegments(model, step) {
+    var sm = rolling(model.arr, Math.max(1, Math.round(model.smooth / step)));
+    var segs = [];
+    sm.forEach(function (v, i) {
+      var z = v == null ? -1 : zoneOf(v, model.th);
+      var last = segs[segs.length - 1];
+      if (last && last.z === z) last.i1 = i + 1; else segs.push({ z: z, i0: i, i1: i + 1 });
+    });
+    var minLen = Math.max(1, Math.round(45 / step));
+    for (;;) {
+      var idx = -1, shortest = Infinity;
+      segs.forEach(function (sg, i) { var l = sg.i1 - sg.i0; if (l < minLen && l < shortest && segs.length > 1) { shortest = l; idx = i; } });
+      if (idx < 0) break;
+      var sg = segs[idx], prev = segs[idx - 1], next = segs[idx + 1];
+      var target = !prev ? next : !next ? prev : (Math.abs(prev.z - sg.z) <= Math.abs(next.z - sg.z) ? prev : next);
+      target.i0 = Math.min(target.i0, sg.i0);
+      target.i1 = Math.max(target.i1, sg.i1);
+      segs.splice(idx, 1);
+      for (var j = segs.length - 1; j > 0; j--) {
+        if (segs[j].z === segs[j - 1].z) { segs[j - 1].i1 = segs[j].i1; segs.splice(j, 1); }
+      }
+    }
+    return segs;
+  }
+  function sliceMean(arr, i0, i1) { return arr ? meanOf(arr.slice(i0, i1)) : null; }
+
+  /* ===== Formats ===== */
+  function fmtPace(cms) {
+    if (!cms || cms <= 0) return '–';
+    var sec = Math.round(1000 / (cms / 100));
+    if (sec >= 3600) return '–';
+    return Math.floor(sec / 60) + ':' + pad2(sec % 60) + ' /km';
+  }
+  function fmtPace100(cms) {
+    if (!cms || cms <= 0) return '–';
+    var sec = Math.round(100 / (cms / 100));
+    return Math.floor(sec / 60) + ':' + pad2(sec % 60) + ' /100 m';
+  }
+  function fmtKmh(cms) { return cms == null ? '–' : nf(cms * 0.036, 1) + ' km/h'; }
+  function fmtClock(sec) {
+    sec = Math.round(sec);
+    var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+    return (h ? h + ':' + pad2(m) : m) + ':' + pad2(s);
+  }
+  function fmtMetric(kind, v, sport) {
+    if (v == null) return '–';
+    if (kind === 'pw') return Math.round(v) + ' W';
+    if (kind === 'hr') return Math.round(v) + ' bpm';
+    if (sport === 'run') return fmtPace(v);
+    if (sport === 'swim') return fmtPace100(v);
+    return fmtKmh(v);
+  }
+  var ZCOL = ['#6B8BA4', '#4CD08A', '#F2D04B', '#F59E42', '#F06464'];
+
+  /* ===== Graphique en ligne (SVG) ===== */
+  function niceStep(range, target) {
+    var raw = range / target, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), n = raw / mag;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * mag;
+  }
+  function lineChart(o) {
+    var W = 340, H = 180, pl = 40, pr = 8, pt = 10, pb = o.ribbon ? 30 : 22;
+    var pw = W - pl - pr, ph = H - pt - pb;
+    var arr = o.arr, n = arr.length, totalSec = n * o.step;
+    var buckets = Math.min(n, 320), per = n / buckets, pts = [];
+    for (var b = 0; b < buckets; b++) {
+      var m = meanOf(arr.slice(Math.floor(b * per), Math.max(Math.floor(b * per) + 1, Math.floor((b + 1) * per))));
+      pts.push(m == null ? null : o.map(m));
+    }
+    var vals = pts.filter(function (v) { return v != null; });
+    (o.refs || []).forEach(function (r) { vals.push(o.map(r.v)); });
+    if (!vals.length) return '';
+    var lo = o.zero ? 0 : Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    if (hi - lo < 1e-6) hi = lo + 1;
+    var st = niceStep(hi - lo, 4);
+    lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+    var x = function (i) { return pl + i / Math.max(1, buckets - 1) * pw; };
+    var y = function (v) { return pt + ph - (v - lo) / (hi - lo) * ph; };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.label) + '">';
+    (o.bands || []).forEach(function (bd) {
+      var x0 = pl + bd.i0 / n * pw, x1 = pl + bd.i1 / n * pw;
+      s += '<rect x="' + x0.toFixed(1) + '" y="' + pt + '" width="' + Math.max(0.5, x1 - x0).toFixed(1) + '" height="' + ph + '" fill="' + bd.c + '" fill-opacity="' + (bd.op || 0.16) + '" stroke="none"/>';
+      if (o.ribbon) s += '<rect x="' + x0.toFixed(1) + '" y="' + (H - pb + 4) + '" width="' + Math.max(0.5, x1 - x0).toFixed(1) + '" height="6" fill="' + bd.c + '" stroke="none"/>';
+    });
+    for (var g = lo; g <= hi + 1e-9; g += st) {
+      s += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(g).toFixed(1) + '" y2="' + y(g).toFixed(1) + '" stroke="#2A3541" stroke-width="1"/>';
+      s += '<text x="' + (pl - 5) + '" y="' + (y(g) + 3.5).toFixed(1) + '" text-anchor="end">' + esc(o.yFmt(g)) + '</text>';
+    }
+    var tstep = niceStep(totalSec / 60, 4);
+    for (var tm = 0; tm <= totalSec / 60 + 1e-9; tm += tstep) {
+      var xt = pl + tm * 60 / totalSec * pw;
+      if (xt > W - pr + 0.5) break;
+      s += '<text x="' + xt.toFixed(1) + '" y="' + (H - 4) + '" text-anchor="' + (xt > W - pr - 14 ? 'end' : 'middle') + '">' + (tm >= 60 ? Math.floor(tm / 60) + 'h' + pad2(Math.round(tm % 60)) : Math.round(tm) + "'") + '</text>';
+    }
+    (o.refs || []).forEach(function (r) {
+      var yr = y(o.map(r.v)).toFixed(1);
+      s += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + yr + '" y2="' + yr + '" stroke="#E8EEF3" stroke-width="1" stroke-dasharray="4 3"/>';
+      s += '<text x="' + (W - pr) + '" y="' + (yr - 3) + '" text-anchor="end" style="fill:#E8EEF3">' + esc(r.label) + '</text>';
+    });
+    var d = '', pen = false;
+    pts.forEach(function (v, i) {
+      if (v == null) { pen = false; return; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1);
+      pen = true;
+    });
+    s += '<path d="' + d + '" stroke="' + o.color + '" stroke-width="1.6" fill="none"/>';
+    return s + '</svg>';
+  }
+
+  /* ===== Panneau d'analyse ===== */
+  function openAnalysis(id) {
+    var s = findSession(id);
+    if (!s || !s.act) return;
+    var st = loadStream(s.act.key);
+    UI.an = { id: id, tab: null, loading: false, err: '' };
+    if (UI.sheet) { UI.sheet = 'analysis'; UI.armed = null; renderSheet(); $('sheet').scrollTop = 0; }
+    else openSheet('analysis');
+    if (!st && s.act.cid && CO.mcp) corosLoadDetail(s);
+  }
+  function analysisTabs(s, st) {
+    var tabs = [];
+    if (st.sp) tabs.push('speed');
+    if (st.hr) tabs.push('hr');
+    if (st.pw) tabs.push('power');
+    if (zoneModel(s, st)) tabs.push('zones', 'intervals');
+    return tabs;
+  }
+  function analysisSheet() {
+    var s = findSession(UI.an.id);
+    if (!s || !s.act) return sheetHead(t('anTitle')) + '<p class="muted">' + esc(t('anNoData')) + '</p>';
+    var when = fmtDate(s.date, { weekday: 'long', day: 'numeric', month: 'long' });
+    var h = sheetHead(t('anTitle'));
+    h += '<div class="imph" style="margin-top:-6px"><span class="pill" style="--c:' + sportColor(s.sport) + '">' + esc(sportShort(s.sport)) + '</span><b>' + esc(when) + '</b><span class="tag">' + esc(s.act.fmt) + '</span></div>';
+    h += '<p class="muted" style="margin:0 0 12px">' + esc(actLabel(s.act, s.sport)) + '</p>';
+    var st = loadStream(s.act.key);
+    if (!st) {
+      if (UI.an.loading) return h + '<p class="muted" role="status">' + esc(t('anLoading')) + '</p>';
+      if (UI.an.err) h += '<p class="err">' + esc(UI.an.err) + '</p>';
+      h += '<p class="muted">' + esc(t('anNoData')) + '</p>';
+      if (s.act.cid && CO.mcp) h += '<button type="button" class="btn primary block" data-act="anLoadCoros">' + esc(t('anLoadCoros')) + '</button>';
+      else h += '<p class="small">' + esc(t('anReimport')) + '</p>';
+      return h;
+    }
+    var tabs = analysisTabs(s, st);
+    if (!tabs.length) return h + '<p class="muted">' + esc(t('anNoData')) + '</p>';
+    if (tabs.indexOf(UI.an.tab) < 0) UI.an.tab = tabs[0];
+    var lbl = { speed: 'anSpeed', hr: 'anHr', zones: 'anZones', power: 'anPower', intervals: 'anIntervals' };
+    h += '<div class="seg antabs" role="tablist">' + tabs.map(function (k) {
+      return '<button type="button" role="tab" data-act="anTab" data-v="' + k + '" aria-pressed="' + (UI.an.tab === k) + '" aria-selected="' + (UI.an.tab === k) + '">' + esc(t(lbl[k])) + '</button>';
+    }).join('') + '</div>';
+    h += '<div class="anbody">' + analysisBody(s, st, UI.an.tab) + '</div>';
+    return h;
+  }
+  function kv(pairs) {
+    return '<div class="kv">' + pairs.map(function (p) { return '<div><span>' + esc(p[0]) + '</span><b>' + esc(p[1]) + '</b></div>'; }).join('') + '</div>';
+  }
+  function analysisBody(s, st, tab) {
+    var h = '';
+    var model = zoneModel(s, st);
+    if (tab === 'speed') {
+      var sm = rolling(st.sp, Math.max(1, Math.round(10 / st.step)));
+      var refs = [];
+      if (model && model.kind === 'sp') refs.push({ v: speedAtVo2(0.86 * estimates(s.date).vdot) * 100 / 60, label: 'T' });
+      h += '<div class="chart">' + lineChart({ arr: sm, step: st.step, color: sportColor(s.sport), map: function (v) { return v * 0.036; }, zero: true, yFmt: function (v) { return nf(v, 0); }, refs: refs, label: t('anSpeed') }) + '</div>';
+      h += '<p class="small" style="margin:4px 0 10px">' + esc(t('anSpeedAxis')) + '</p>';
+      var avg = meanOf(st.sp.filter(function (v) { return v != null && v > 30; })), mx = maxOf(sm);
+      var pairs = [[t('anAvg'), fmtKmh(avg)], [t('anMax'), fmtKmh(mx)]];
+      if (s.sport === 'run' || s.sport === 'brick') pairs.push([t('anAvgPace'), fmtPace(avg)]);
+      if (s.sport === 'swim') pairs.push([t('anAvgPace'), fmtPace100(avg)]);
+      h += kv(pairs);
+    } else if (tab === 'hr') {
+      var est = estimates(s.date);
+      var hm = hrModel(st, est);
+      var segs = est.hrmax ? detectSegments(hm, st.step) : [];
+      h += '<div class="chart">' + lineChart({ arr: st.hr, step: st.step, color: '#F06464', map: function (v) { return v; }, yFmt: function (v) { return Math.round(v); }, bands: segs.filter(function (g) { return g.z >= 0; }).map(function (g) { return { i0: g.i0, i1: g.i1, c: ZCOL[g.z], op: 0.12 }; }), label: t('anHr') }) + '</div>';
+      h += '<p class="small" style="margin:4px 0 10px">' + esc(t('anHrAxis')) + '</p>';
+      h += kv([[t('anAvg'), fmtMetric('hr', meanOf(st.hr))], [t('anMax'), fmtMetric('hr', maxOf(st.hr))], [t('anHrMax'), est.hrmax ? est.hrmax + ' bpm' : '–']]);
+    } else if (tab === 'power') {
+      var ftp = estimates(s.date).ftp;
+      var ps = rolling(st.pw, Math.max(1, Math.round(10 / st.step)));
+      h += '<div class="chart">' + lineChart({ arr: ps, step: st.step, color: '#B48CF2', map: function (v) { return v; }, zero: true, yFmt: function (v) { return Math.round(v); }, refs: ftp && s.sport === 'bike' ? [{ v: ftp, label: 'FTP ' + ftp + ' W' }] : [], label: t('anPower') }) + '</div>';
+      h += '<p class="small" style="margin:4px 0 10px">' + esc(t('anPowerAxis')) + '</p>';
+      var np = normPower(st), avgp = meanOf(st.pw);
+      var pairs2 = [[t('anAvg'), fmtMetric('pw', avgp)], [t('anNp'), fmtMetric('pw', np)]];
+      if (ftp && s.sport === 'bike' && np) pairs2.push([t('anIf'), nf(np / ftp, 2)]);
+      h += kv(pairs2);
+      h += '<h3 class="h3">' + esc(t('anCurve')) + '</h3><table class="tbl"><tbody>';
+      [[5, '5 s'], [60, '1 min'], [300, '5 min'], [1200, '20 min'], [3600, '60 min']].forEach(function (d) {
+        var b = bestMean(st.pw, st.step, d[0]);
+        if (b != null) h += '<tr><td>' + d[1] + '</td><td>' + Math.round(b) + ' W</td></tr>';
+      });
+      h += '</tbody></table>';
+      if (s.sport !== 'bike') h += '<p class="small">' + esc(t('anPowerNonBike')) + '</p>';
+    } else if (tab === 'zones') {
+      var secs = timeInZones(model, st.step), tot = secs.reduce(function (a, b) { return a + b; }, 0) || 1;
+      h += '<p class="small" style="margin:0 0 10px">' + esc(model.basis) + '</p>';
+      h += zoneBars(secs, tot, model, s.sport);
+      if (model.kind !== 'hr' && st.hr && estimates(s.date).hrmax) {
+        var hm2 = hrModel(st, estimates(s.date)), secs2 = timeInZones(hm2, st.step);
+        h += '<h3 class="h3">' + esc(t('anHrZones')) + '</h3><p class="small" style="margin:0 0 10px">' + esc(hm2.basis) + '</p>';
+        h += zoneBars(secs2, secs2.reduce(function (a, b) { return a + b; }, 0) || 1, hm2, s.sport);
+      }
+    } else if (tab === 'intervals') {
+      var segs2 = detectSegments(model, st.step);
+      var sm2 = rolling(model.arr, Math.max(1, Math.round(10 / st.step)));
+      var isSp = model.kind === 'sp';
+      h += '<p class="small" style="margin:0 0 6px">' + esc(model.basis) + '</p>';
+      h += '<div class="chart">' + lineChart({
+        arr: sm2, step: st.step, color: '#E8EEF3', ribbon: true, zero: model.kind !== 'hr',
+        map: isSp ? function (v) { return v * 0.036; } : function (v) { return v; },
+        yFmt: function (v) { return Math.round(v); },
+        bands: segs2.filter(function (g) { return g.z >= 0; }).map(function (g) { return { i0: g.i0, i1: g.i1, c: ZCOL[g.z], op: 0.22 }; }),
+        label: t('anIntervals')
+      }) + '</div>';
+      h += '<p class="small" style="margin:4px 0 10px">' + esc(t(model.kind === 'pw' ? 'anPowerAxis' : model.kind === 'hr' ? 'anHrAxis' : 'anSpeedAxis')) + ' · ' + esc(t('anRibbon')) + '</p>';
+      var efforts = segs2.filter(function (g) { return g.z >= 3; });
+      h += '<h3 class="h3">' + esc(t('anEfforts', { n: efforts.length })) + '</h3>';
+      if (!efforts.length) h += '<p class="muted">' + esc(t('anNoEfforts')) + '</p>';
+      else {
+        h += '<table class="tbl"><thead><tr><th>#</th><th>' + esc(t('anStart')) + '</th><th>' + esc(t('anDur')) + '</th><th>' + esc(t('zone')) + '</th><th>' + esc(t('anAvg')) + '</th><th>' + esc(t('anHr')) + '</th></tr></thead><tbody>';
+        efforts.forEach(function (g, i) {
+          h += '<tr><td>' + (i + 1) + '</td><td>' + fmtClock(g.i0 * st.step) + '</td><td>' + fmtClock((g.i1 - g.i0) * st.step) + '</td><td><span class="zchip" style="background:' + ZCOL[g.z] + '">Z' + (g.z + 1) + '</span></td><td>' + esc(fmtMetric(model.kind, sliceMean(model.arr, g.i0, g.i1), s.sport)) + '</td><td>' + esc(st.hr ? fmtMetric('hr', sliceMean(st.hr, g.i0, g.i1)) : '–') + '</td></tr>';
+        });
+        h += '</tbody></table>';
+      }
+      h += '<h3 class="h3">' + esc(t('anSegments')) + '</h3><div class="segline">' + segs2.filter(function (g) { return g.z >= 0; }).map(function (g) {
+        return '<span style="background:' + ZCOL[g.z] + ';flex:' + (g.i1 - g.i0) + '" title="Z' + (g.z + 1) + ' · ' + fmtClock((g.i1 - g.i0) * st.step) + '"></span>';
+      }).join('') + '</div>';
+    }
+    return h;
+  }
+  function zoneBars(secs, tot, model, sport) {
+    var h = '<div class="zbars">';
+    secs.forEach(function (sec, z) {
+      var lo = z === 0 ? null : model.th[z - 1], hi = z === 4 ? null : model.th[z], range;
+      if (model.kind === 'sp' && sport === 'run') {
+        range = z === 0 ? '> ' + fmtPace(hi) : z === 4 ? '< ' + fmtPace(lo) : fmtPace(hi).replace(' /km', '') + '–' + fmtPace(lo);
+      } else {
+        range = lo == null ? '< ' + fmtMetric(model.kind, hi, sport) : hi == null ? '≥ ' + fmtMetric(model.kind, lo, sport)
+          : fmtMetric(model.kind, lo, sport).replace(/ .*/, '') + '–' + fmtMetric(model.kind, hi, sport);
+      }
+      h += '<div class="zrow"><span class="zchip" style="background:' + ZCOL[z] + '">Z' + (z + 1) + '</span>'
+        + '<div class="zmain"><div class="ztrack"><i style="width:' + (sec / tot * 100).toFixed(1) + '%;background:' + ZCOL[z] + '"></i></div><span class="small">' + esc(range) + '</span></div>'
+        + '<span class="zval">' + esc(fmtDur(sec / 60)) + '<br><span class="small">' + Math.round(sec / tot * 100) + ' %</span></span></div>';
+    });
+    return h + '</div>';
+  }
+
+  /* Détail COROS : fichier FIT original via le connecteur (outil downloadActivityFitFiles) */
+  function b64ToBuf(b64) {
+    var bin = atob(b64.replace(/\s+/g, '')), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out.buffer;
+  }
+  function findBlob(res) {
+    var blocks = (res && res.content) || [];
+    for (var i = 0; i < blocks.length; i++) {
+      var c = blocks[i] || {};
+      var b = (c.resource && c.resource.blob) || c.blob || (c.type !== 'text' && c.type !== 'image' ? c.data : null);
+      if (typeof b === 'string' && b.length > 16) return b;
+    }
+    return null;
+  }
+  function corosDetailFetch(act) {
+    return CO.mcp.callTool(COROS_SERVER, 'downloadActivityFitFiles', { labelId: act.cid, sportType: act.ct, limit: 1 }, { cache: false })
+      .then(function (res) {
+        var b64 = findBlob(res);
+        if (!b64) throw new Error('format');
+        var acts = parseFit(b64ToBuf(b64));
+        var withStream = acts.filter(function (a) { return a.stream; });
+        if (!withStream.length) throw new Error('nosession');
+        saveStream(act.key, withStream[0].stream);
+      });
+  }
+  function corosLoadDetail(s) {
+    UI.an.loading = true;
+    UI.an.err = '';
+    if (UI.sheet === 'analysis') renderSheet();
+    corosDetailFetch(s.act).then(function () {
+      UI.an.loading = false;
+      if (UI.sheet === 'analysis') renderSheet();
+    }, function (e) {
+      UI.an.loading = false;
+      UI.an.err = e && e.code ? corosErr(e) : t('anCorosFail');
+      if (UI.sheet === 'analysis') renderSheet();
+    });
+  }
+  /* après une synchro auto : récupère le détail des nouvelles activités COROS (5 max), l'une après l'autre */
+  function corosFetchDetails(acts) {
+    var queue = acts.filter(function (a) { return a.cid && !loadStream(a.key); }).slice(-5);
+    (function next() {
+      var a = queue.shift();
+      if (!a || !CO.mcp) return;
+      corosDetailFetch(a).then(next, next);
+    })();
+  }
+
   /* ===== Confirmation en deux temps ===== */
   var armTimer = null;
   function confirmStep(key, el) {
@@ -1705,7 +2354,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     weekToday: function () { UI.week = mondayOf(todayIso()); render(); },
     clearSample: function () {
       S.sessions = []; S.races = []; S.sample = false;
-      persist(); render(); toast(t('sampleCleared'));
+      persist(); pruneStreams(); render(); toast(t('sampleCleared'));
     },
     toggleDone: function (el) { setStatus(el.getAttribute('data-id'), 'done'); },
     toggleMissed: function (el) { setStatus(el.getAttribute('data-id'), 'missed'); },
@@ -1741,7 +2390,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     unlinkAct: function () {
       readSessionForm();
       var s = F.id && findSession(F.id);
-      if (s) { delete s.act; touch(); persist(); render(); }
+      if (s) { if (s.act) dropStream(s.act.key); delete s.act; touch(); persist(); render(); }
       F.act = null;
       renderSheet();
       toast(t('unlinked'));
@@ -1775,7 +2424,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     delSession: function (el) {
       if (!confirmStep('delSession', el)) return;
       S.sessions = S.sessions.filter(function (s) { return s.id !== F.id; });
-      touch(); persist(); closeSheet(); render(); toast(t('deleted'));
+      touch(); persist(); pruneStreams(); closeSheet(); render(); toast(t('deleted'));
     },
     copyPrev: function () {
       var from = addDays(UI.week, -7), to = addDays(UI.week, -1);
@@ -1836,29 +2485,41 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       data.sample = false;
       S = data;
       persist();
+      pruneStreams();
       UI.week = mondayOf(todayIso());
       UI.showExport = false;
       render(); toast(t('importOk'));
     },
     loadSample: function (el) {
       if (!confirmStep('loadSample', el)) return;
-      var auto = S.coros.auto;
+      var auto = S.coros.auto, zonesPref = S.zones;
       S = sanitize(sampleData(S.lang));
       S.sample = true;
       S.coros.auto = auto;
+      S.zones = zonesPref;
       persist();
+      pruneStreams();
       UI.week = mondayOf(todayIso());
       UI.showExport = false;
       render(); toast(t('sampleLoaded'));
     },
     clearAll: function (el) {
       if (!confirmStep('clearAll', el)) return;
-      S = { v: 1, lang: S.lang, sample: false, sessions: [], races: [], coros: { auto: S.coros.auto, last: 0, seen: [] } };
+      S = { v: 1, lang: S.lang, sample: false, sessions: [], races: [], coros: { auto: S.coros.auto, last: 0, seen: [] }, zones: S.zones };
       persist();
+      pruneStreams();
       UI.showExport = false;
       render(); toast(t('cleared'));
     },
     corosSync: function () { corosSync(false); },
+    analyze: function (el) { readSessionForm(); openAnalysis(el.getAttribute('data-id')); },
+    anTab: function (el) {
+      UI.an.tab = el.getAttribute('data-v');
+      renderSheet();
+      var b = $('sheet').querySelector('[data-act="anTab"][data-v="' + UI.an.tab + '"]');
+      if (b) b.focus();
+    },
+    anLoadCoros: function () { var s = findSession(UI.an.id); if (s && s.act) corosLoadDetail(s); },
     openImport: function () { UI.imp = { stage: 'pick' }; openSheet('import'); },
     impReset: function () { UI.imp = { stage: 'pick' }; renderSheet(); },
     impApply: function () { applyImport(); },
@@ -1878,6 +2539,15 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       renderSheet();
       var r = $('sheet').querySelector('input[name="ch' + el.getAttribute('data-i') + '"]:checked');
       if (r) r.focus();
+    },
+    zoneOv: function (el) {
+      var k = el.getAttribute('data-k'), patch = {};
+      Object.keys(S.zones).forEach(function (x) { patch[x] = S.zones[x]; });
+      patch[k] = el.value;
+      S.zones = sanitizeZones(patch);
+      el.value = S.zones[k] == null ? '' : String(S.zones[k]).replace('.', S.lang === 'fr' ? ',' : '.');
+      persist();
+      toast(t(S.zones[k] == null ? 'zAutoSet' : 'zSaved'));
     },
     corosAuto: function (el) {
       S.coros.auto = el.checked;
