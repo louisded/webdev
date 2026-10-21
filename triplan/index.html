@@ -72,6 +72,7 @@ main { padding-top: 14px; padding-bottom: calc(var(--tabh) + 92px + env(safe-are
 .btn.danger { color: var(--missed); }
 .btn.armed { background: var(--missed); border-color: var(--missed); color: #fff; }
 .btn.block { width: 100%; }
+.btn:disabled { opacity: .6; cursor: default; }
 .btn.sm { min-height: 36px; padding: 6px 12px; font-size: 14px; }
 .link { background: none; border: 0; padding: 8px 0; min-height: 36px; color: var(--text2); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
 .btn svg, .link svg { width: 18px; height: 18px; }
@@ -260,7 +261,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
   'use strict';
 
   /* ===== Constantes ===== */
-  var VERSION = '0.2';
+  var VERSION = '0.3';
   var KEY = 'triplan.mobile.v1';
   var TAB_KEY = KEY + '.tab';
 
@@ -288,7 +289,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     other: { d: null, fr: 'Autre', en: 'Other' }
   };
   var PRIOS = ['A', 'B', 'C'];
-  var ACT_FORMATS = ['FIT', 'GPX', 'TCX'];
+  var ACT_FORMATS = ['FIT', 'GPX', 'TCX', 'COROS'];
 
   var I18N = {
     fr: {
@@ -341,6 +342,19 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       impErrNone: 'Retenez au moins une activité.', impErrSport: 'Choisissez un sport pour chaque activité retenue.', impErrDup: 'Deux activités ne peuvent pas valider la même séance.',
       impDone: '{n} activité(s) importée(s)', errFile: 'Fichier illisible', errNoZip: 'Lecture des .zip impossible : JSZip non chargé (connexion requise).',
       errZipEmpty: 'Aucun fichier FIT, GPX ou TCX dans l’archive.', errNoSession: 'Aucune activité exploitable dans le fichier.', errFormat: 'Format non reconnu (FIT, GPX, TCX ou ZIP attendu).',
+      corosTitle: 'Synchronisation COROS',
+      corosIntro: 'Récupère automatiquement vos activités depuis votre compte COROS, via le connecteur COROS de claude.ai.',
+      corosAuto: 'Synchroniser automatiquement à l’ouverture', corosNow: 'Synchroniser COROS', corosSyncing: 'Synchronisation COROS…',
+      corosLast: 'Dernière synchronisation : {d}', corosNever: 'Jamais synchronisé', corosChecking: 'Recherche du connecteur COROS…',
+      corosUnavailable: 'Synchronisation COROS disponible uniquement quand l’app est ouverte sur claude.ai avec le connecteur COROS connecté. Sinon, utilisez l’import de fichiers.',
+      corosAutoDone: 'COROS : {n} activité(s) synchronisée(s)', corosUpToDate: 'COROS : aucune nouvelle activité',
+      corosErrNotConnected: 'Connecteur COROS absent : ajoutez-le dans claude.ai › Paramètres › Connecteurs.',
+      corosErrReauth: 'Connexion COROS expirée : reconnectez COROS dans claude.ai › Paramètres › Connecteurs.',
+      corosErrDenied: 'Accès à COROS non autorisé pour cette page : autorisez-le dans le menu Autorisations de la page, puis relancez la synchronisation.',
+      corosErrApproval: 'COROS attend votre autorisation : relancez « Synchroniser COROS ».',
+      corosErrSelect: 'Plusieurs connecteurs COROS : choisissez-en un dans claude.ai.',
+      corosErrBusy: 'COROS ne répond pas pour le moment. Réessayez plus tard.',
+      corosErrFormat: 'Réponse de COROS non reconnue.', corosErrOther: 'Synchronisation COROS impossible ({m}).',
       cd: 'J-{n}', sampleRaceA: 'Triathlon objectif (exemple)', sampleRaceC: 'Sprint de préparation (exemple)'
     },
     en: {
@@ -393,6 +407,19 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       impErrNone: 'Keep at least one activity.', impErrSport: 'Choose a sport for each kept activity.', impErrDup: 'Two activities cannot complete the same session.',
       impDone: '{n} activity(ies) imported', errFile: 'Unreadable file', errNoZip: 'Cannot read .zip files: JSZip not loaded (connection required).',
       errZipEmpty: 'No FIT, GPX or TCX file in the archive.', errNoSession: 'No usable activity in the file.', errFormat: 'Unrecognised format (FIT, GPX, TCX or ZIP expected).',
+      corosTitle: 'COROS sync',
+      corosIntro: 'Automatically fetches your activities from your COROS account, through the claude.ai COROS connector.',
+      corosAuto: 'Sync automatically on open', corosNow: 'Sync COROS', corosSyncing: 'Syncing COROS…',
+      corosLast: 'Last sync: {d}', corosNever: 'Never synced', corosChecking: 'Looking for the COROS connector…',
+      corosUnavailable: 'COROS sync is only available when the app is opened on claude.ai with the COROS connector connected. Otherwise, use file import.',
+      corosAutoDone: 'COROS: {n} activity(ies) synced', corosUpToDate: 'COROS: no new activity',
+      corosErrNotConnected: 'COROS connector missing: add it in claude.ai › Settings › Connectors.',
+      corosErrReauth: 'COROS connection expired: reconnect COROS in claude.ai › Settings › Connectors.',
+      corosErrDenied: 'COROS access not allowed for this page: allow it in the page’s Permissions menu, then sync again.',
+      corosErrApproval: 'COROS is waiting for your approval: tap “Sync COROS” again.',
+      corosErrSelect: 'Several COROS connectors: choose one in claude.ai.',
+      corosErrBusy: 'COROS is not responding right now. Try again later.',
+      corosErrFormat: 'Unrecognised COROS response.', corosErrOther: 'COROS sync failed ({m}).',
       cd: 'D-{n}', sampleRaceA: 'Goal triathlon (sample)', sampleRaceC: 'Training sprint (sample)'
     }
   };
@@ -546,9 +573,18 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       location: str(r.location, 120).trim()
     };
   }
+  function sanitizeCoros(c) {
+    c = c && typeof c === 'object' ? c : {};
+    var last = clampNum(c.last, 0, 9e15);
+    return {
+      auto: c.auto !== false,
+      last: last || 0,
+      seen: (Array.isArray(c.seen) ? c.seen : []).filter(function (k) { return typeof k === 'string' && /^t\d+$/.test(k); }).slice(-1000)
+    };
+  }
   function sanitize(o) {
     if (!o || typeof o !== 'object' || Array.isArray(o)) return null;
-    var out = { v: 1, lang: o.lang === 'en' ? 'en' : (o.lang === 'fr' ? 'fr' : defaultLang()), sample: o.sample === true, sessions: [], races: [] };
+    var out = { v: 1, lang: o.lang === 'en' ? 'en' : (o.lang === 'fr' ? 'fr' : defaultLang()), sample: o.sample === true, sessions: [], races: [], coros: sanitizeCoros(o.coros) };
     var ids = {};
     (Array.isArray(o.sessions) ? o.sessions : []).forEach(function (s) {
       var c = sanitizeSession(s);
@@ -824,17 +860,52 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       });
     }
     return Promise.all(list.map(one)).then(function () {
-      var seen = {}, uniq = [];
-      acts.forEach(function (a) {
-        if (!isFinite(a.start) || seen[a.key]) return;
-        seen[a.key] = 1;
-        uniq.push(a);
-      });
-      uniq.sort(function (a, b) { return a.start - b.start; });
-      return { acts: uniq, errors: errors };
+      return { acts: dedupeSort(acts), errors: errors };
     });
   }
-  window.TriPlanImport = { parseFit: parseFit, parseGpx: parseGpx, parseTcx: parseTcx, parseFiles: parseFiles };
+  function dedupeSort(acts) {
+    var seen = {}, uniq = [];
+    acts.forEach(function (a) {
+      if (!isFinite(a.start) || seen[a.key]) return;
+      seen[a.key] = 1;
+      uniq.push(a);
+    });
+    uniq.sort(function (a, b) { return a.start - b.start; });
+    return uniq;
+  }
+
+  /* Réponse texte de l'outil COROS querySportRecords : un bloc numéroté par activité */
+  function corosSport(code) {
+    if (code >= 100 && code <= 103) return 'run';
+    if ((code >= 200 && code <= 205) || code === 299) return 'bike';
+    if (code === 300 || code === 301) return 'swim';
+    if (code === 400 || code === 401 || code === 402 || code === 1200 || code === 9901) return 'strength';
+    if (code === 10000 || code === 10001) return 'brick';
+    return '';
+  }
+  function hmsToMin(txt) {
+    var sec = 0;
+    txt.split(':').forEach(function (x) { sec = sec * 60 + Number(x); });
+    return sec / 60;
+  }
+  function parseCorosRecords(txt) {
+    if (typeof txt !== 'string' || !/Sport Records|startTimestamp/.test(txt)) throw new Error('format');
+    var out = [];
+    txt.split(/\n\s*\d+\.\s+/).slice(1).forEach(function (b) {
+      var st = /startTimestamp=(\d+)/.exec(b);
+      if (!st) return;
+      var start = Number(st[1]) * 1000;
+      var en = /endTimestamp=(\d+)/.exec(b);
+      var du = /Duration:\s*(\d+(?::\d+){1,2})/.exec(b);
+      var di = /Distance:\s*([\d.,]+)\s*(km|m)\b/.exec(b);
+      var sp = /SportType:\s*(\d+)/.exec(b);
+      var dur = du ? hmsToMin(du[1]) : (en ? (Number(en[1]) * 1000 - start) / 60000 : 0);
+      var dist = di ? parseFloat(di[1].replace(',', '.')) / (di[2] === 'm' ? 1000 : 1) : 0;
+      out.push({ start: start, sport: sp ? corosSport(Number(sp[1])) : '', dur: Math.max(0, dur), dist: isFinite(dist) ? dist : 0, fmt: 'COROS', key: actKey(start) });
+    });
+    return dedupeSort(out);
+  }
+  window.TriPlanImport = { parseFit: parseFit, parseGpx: parseGpx, parseTcx: parseTcx, parseFiles: parseFiles, parseCorosRecords: parseCorosRecords };
 
   /* ===== Plan d'exemple (valeurs de démonstration) ===== */
   function sampleData(lang) {
@@ -1024,6 +1095,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     }
     h += '<div class="planactions">'
       + '<button type="button" class="btn block" data-act="openImport">' + ICONS.upload + esc(t('importActs')) + '</button>'
+      + '<div id="corosPlan" style="width:100%">' + corosPlanHtml() + '</div>'
       + '<button type="button" class="link" data-act="copyPrev">' + esc(t('copyPrev')) + '</button>'
       + '</div>';
     return h;
@@ -1207,6 +1279,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       + '<button type="button" class="btn block" data-act="loadSample" data-label="' + esc(t('loadSample')) + '" data-confirm="' + esc(t('confirmSample')) + '">' + esc(t('loadSample')) + '</button>'
       + '<button type="button" class="btn danger block" data-act="clearAll" data-label="' + esc(t('clearAll')) + '" data-confirm="' + esc(t('confirmClear')) + '">' + esc(t('clearAll')) + '</button>'
       + '</section>';
+    h += '<h2 class="h2">' + esc(t('corosTitle')) + '</h2><section class="panel" id="corosBox">' + corosBoxHtml() + '</section>';
     h += '<h2 class="h2">' + esc(t('about')) + '</h2><section class="panel"><p style="margin:0 0 6px;font-weight:600">' + esc(t('versionTxt')) + '</p><p class="muted" style="margin:0">' + esc(t('install')) + '</p></section>';
     return h;
   }
@@ -1347,6 +1420,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       h += '<p class="muted" style="margin-top:0">' + esc(t('impIntro')) + '</p>'
         + '<ul class="steps"><li>' + esc(t('impGarmin')) + '</li><li>' + esc(t('impCoros')) + '</li><li>' + esc(t('impPhone')) + '</li></ul>'
         + '<p class="small">' + esc(t('impUnverified')) + '</p>';
+      if (CO.state === 'ready') h += '<button type="button" class="btn block" style="margin-bottom:8px" data-act="corosSync"' + (CO.busy ? ' disabled' : '') + '>' + esc(CO.busy ? t('corosSyncing') : t('corosNow')) + '</button>';
       if (imp.stage === 'busy') h += '<p class="muted" role="status">' + esc(t('impReading')) + '</p>';
       else h += '<label class="btn primary block" for="impFile" data-autofocus tabindex="0">' + ICONS.upload + esc(t('impChoose')) + '</label>'
         + '<input type="file" id="impFile" class="sr-only" multiple data-chg="impFiles">';
@@ -1431,6 +1505,18 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
         targets[c] = 1;
       }
     }
+    var lastDate = applyItems(kept);
+    markSeen(items.map(function (it) { return it.a; }));
+    touch();
+    persist();
+    closeSheet();
+    UI.tab = 'plan';
+    storageSet(TAB_KEY, 'plan');
+    UI.week = mondayOf(lastDate);
+    render();
+    toast(t('impDone', { n: kept.length }));
+  }
+  function applyItems(kept) {
     var lastDate = null;
     kept.forEach(function (it) {
       var a = it.a;
@@ -1449,15 +1535,123 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       }
       if (!lastDate || date > lastDate) lastDate = date;
     });
-    touch();
-    persist();
-    closeSheet();
-    UI.tab = 'plan';
-    storageSet(TAB_KEY, 'plan');
-    UI.week = mondayOf(lastDate);
-    render();
-    toast(t('impDone', { n: kept.length }));
+    return lastDate;
   }
+  function markSeen(acts) {
+    var seen = S.coros.seen;
+    acts.forEach(function (a) { if (a.fmt === 'COROS' && seen.indexOf(a.key) < 0) seen.push(a.key); });
+    if (seen.length > 1000) S.coros.seen = seen.slice(-1000);
+  }
+
+  /* ===== Synchronisation COROS via le connecteur claude.ai (capability mcp) ===== */
+  var COROS_SERVER = 'Coros', COROS_TOOL = 'querySportRecords';
+  var CO = { state: window.claude && typeof window.claude.use === 'function' ? 'checking' : 'none', mcp: null, busy: false, err: '' };
+  function ymd(iso) { return iso.replace(/-/g, ''); }
+  function corosErr(e) {
+    var c = e && e.code;
+    if (c === 'server_not_connected' || c === 'server_not_found') return t('corosErrNotConnected');
+    if (c === 'needs_reauth') return t('corosErrReauth');
+    if (c === 'not_in_manifest' || c === 'consent_required' || c === 'blocked_by_policy' || c === 'not_granted' || c === 'capability_disabled' || c === 'capability_removed') return t('corosErrDenied');
+    if (c === 'approval_required') return t('corosErrApproval');
+    if (c === 'selection_required') return t('corosErrSelect');
+    if (c === 'server_unavailable' || c === 'rate_limited') return t('corosErrBusy');
+    if (e && e.message === 'format') return t('corosErrFormat');
+    return t('corosErrOther', { m: c || (e && e.message) || '?' });
+  }
+  function corosFetch(fromIso, toIso, retried) {
+    return CO.mcp.callTool(COROS_SERVER, COROS_TOOL, {
+      startDate: ymd(fromIso), endDate: ymd(toIso), sportTypeCodes: null,
+      minDistanceKm: null, maxDistanceKm: null, minDurationMinutes: null, maxDurationMinutes: null,
+      maxAveragePace: null, locationKeyword: null, limit: 50
+    }, { cache: false }).then(function (res) {
+      return parseCorosRecords(res && res.payload);
+    }, function (e) {
+      if (e && e.retryable && !retried) {
+        var wait = Math.min(60000, e.retryAfterMs || 1500 + Math.random() * 2000);
+        return new Promise(function (r) { setTimeout(r, wait); }).then(function () { return corosFetch(fromIso, toIso, true); });
+      }
+      throw e;
+    });
+  }
+  /* auto : applique les choix par défaut sans confirmation ; sinon : ouvre l'aperçu d'import */
+  function corosSync(auto) {
+    if (!CO.mcp || CO.busy) return;
+    CO.busy = true;
+    CO.err = '';
+    refreshCoros();
+    var today = todayIso();
+    var from = auto && S.coros.last ? addDays(isoOf(new Date(S.coros.last)), -2) : addDays(today, -13);
+    if (from > today) from = today;
+    corosFetch(from, today).then(function (acts) {
+      CO.busy = false;
+      S.coros.last = Date.now();
+      if (auto) {
+        var seen = {};
+        S.coros.seen.forEach(function (k) { seen[k] = 1; });
+        var items = buildImportItems(acts.filter(function (a) { return a.sport && !seen[a.key]; }))
+          .filter(function (it) { return it.choice !== 'skip'; });
+        markSeen(acts);
+        if (items.length) {
+          applyItems(items);
+          touch();
+          toast(t('corosAutoDone', { n: items.length }));
+        }
+        persist();
+        if (UI.sheet) refreshCoros(); else render();
+      } else {
+        persist();
+        var list = buildImportItems(acts);
+        list.forEach(function (it) { if (!it.sport) it.choice = 'skip'; });
+        UI.imp = { stage: 'review', items: list, errors: [] };
+        if (UI.sheet === 'import') { renderSheet(); $('sheet').scrollTop = 0; } else openSheet('import');
+        refreshCoros();
+        if (!list.length) toast(t('corosUpToDate'));
+      }
+    }, function (e) {
+      CO.busy = false;
+      CO.err = corosErr(e);
+      if (!auto) toast(CO.err);
+      refreshCoros();
+    });
+  }
+  function corosStatusText() {
+    if (CO.busy) return t('corosSyncing');
+    if (!S.coros.last) return t('corosNever');
+    return t('corosLast', { d: new Intl.DateTimeFormat(locale(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(S.coros.last)) });
+  }
+  function corosPlanHtml() {
+    if (CO.state !== 'ready') return '';
+    return '<button type="button" class="btn block" style="margin-top:8px" data-act="corosSync"' + (CO.busy ? ' disabled' : '') + '>' + esc(CO.busy ? t('corosSyncing') : t('corosNow')) + '</button>'
+      + '<p class="small" style="text-align:center;margin:6px 0 0">' + esc(CO.busy ? '' : corosStatusText()) + '</p>'
+      + (CO.err ? '<p class="err" style="text-align:center;margin:6px 0 0">' + esc(CO.err) + '</p>' : '');
+  }
+  function corosBoxHtml() {
+    if (CO.state === 'checking') return '<p class="muted" style="margin:0">' + esc(t('corosChecking')) + '</p>';
+    if (CO.state !== 'ready') return '<p class="muted" style="margin:0">' + esc(t('corosUnavailable')) + '</p>';
+    return '<p class="muted" style="margin-top:0">' + esc(t('corosIntro')) + '</p>'
+      + '<label class="choice"><input type="checkbox" data-chg="corosAuto"' + (S.coros.auto ? ' checked' : '') + '><span>' + esc(t('corosAuto')) + '</span></label>'
+      + '<p class="small" role="status">' + esc(corosStatusText()) + '</p>'
+      + (CO.err ? '<p class="err">' + esc(CO.err) + '</p>' : '')
+      + '<button type="button" class="btn block" data-act="corosSync"' + (CO.busy ? ' disabled' : '') + '>' + esc(CO.busy ? t('corosSyncing') : t('corosNow')) + '</button>';
+  }
+  function refreshCoros() {
+    var a = $('corosPlan'), b = $('corosBox');
+    if (a) a.innerHTML = corosPlanHtml();
+    if (b) b.innerHTML = corosBoxHtml();
+    if (UI.sheet === 'import' && UI.imp && UI.imp.stage === 'pick') renderSheet();
+  }
+  function corosInit() {
+    if (CO.state !== 'checking') return;
+    window.claude.use('mcp').then(function (m) {
+      CO.mcp = m;
+      CO.state = m ? 'ready' : 'none';
+      refreshCoros();
+      if (m && S.coros.auto) corosSync(true);
+    }, function () { CO.state = 'none'; refreshCoros(); });
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && CO.mcp && S.coros.auto && Date.now() - S.coros.last > 30 * 60000) corosSync(true);
+  });
 
   /* ===== Confirmation en deux temps ===== */
   var armTimer = null;
@@ -1648,8 +1842,10 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     },
     loadSample: function (el) {
       if (!confirmStep('loadSample', el)) return;
+      var auto = S.coros.auto;
       S = sanitize(sampleData(S.lang));
       S.sample = true;
+      S.coros.auto = auto;
       persist();
       UI.week = mondayOf(todayIso());
       UI.showExport = false;
@@ -1657,11 +1853,12 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
     },
     clearAll: function (el) {
       if (!confirmStep('clearAll', el)) return;
-      S = { v: 1, lang: S.lang, sample: false, sessions: [], races: [] };
+      S = { v: 1, lang: S.lang, sample: false, sessions: [], races: [], coros: { auto: S.coros.auto, last: 0, seen: [] } };
       persist();
       UI.showExport = false;
       render(); toast(t('cleared'));
     },
+    corosSync: function () { corosSync(false); },
     openImport: function () { UI.imp = { stage: 'pick' }; openSheet('import'); },
     impReset: function () { UI.imp = { stage: 'pick' }; renderSheet(); },
     impApply: function () { applyImport(); },
@@ -1681,6 +1878,11 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
       renderSheet();
       var r = $('sheet').querySelector('input[name="ch' + el.getAttribute('data-i') + '"]:checked');
       if (r) r.focus();
+    },
+    corosAuto: function (el) {
+      S.coros.auto = el.checked;
+      persist();
+      if (S.coros.auto) corosSync(true);
     },
     jsonFile: function (el) {
       var f = el.files && el.files[0];
@@ -1717,6 +1919,7 @@ input[type="date"].input { -webkit-appearance: none; appearance: none; }
   });
 
   render();
+  corosInit();
 })();
 </script>
 </body>
